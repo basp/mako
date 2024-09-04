@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0B4E07FD-43E3-4284-AB9C-F8D2ACA9D993}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mako", "src\Mako\Mako.csproj", "{40EB2647-44FD-48F2-BDC4-2C7E65A6BC0D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40EB2647-44FD-48F2-BDC4-2C7E65A6BC0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40EB2647-44FD-48F2-BDC4-2C7E65A6BC0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40EB2647-44FD-48F2-BDC4-2C7E65A6BC0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40EB2647-44FD-48F2-BDC4-2C7E65A6BC0D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{40EB2647-44FD-48F2-BDC4-2C7E65A6BC0D} = {0B4E07FD-43E3-4284-AB9C-F8D2ACA9D993}
+	EndGlobalSection
+EndGlobal
