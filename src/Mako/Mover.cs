@@ -1,76 +1,75 @@
 ﻿using System.Numerics;
 using Raylib_CSharp;
 using Raylib_CSharp.Camera.Cam2D;
+using Raylib_CSharp.Collision;
 using Raylib_CSharp.Colors;
+using Raylib_CSharp.Interact;
 using Raylib_CSharp.Rendering;
+using Raylib_CSharp.Transformations;
 
 namespace Mako;
 
 internal class Mover
 {
-    private readonly Random random = new();
-    
-    private float Radius { get; set; }
-    
     public Vector2 Position { get; set; }
 
     public Vector2 Velocity { get; set; }
-    
+
     public Vector2 Acceleration { get; set; }
 
-    public float Mass { get; set; }
+    public Vector2 TopSpeed { get; } = new(4f, 4f);
 
-    public float Angle { get; set; }
-    
-    public float AngleVelocity { get; set; }
-    
-    public float AngleAcceleration { get; set; }
-
-    public Mover(float x, float y, float mass)
+    public Mover(float x, float y)
     {
-        this.Mass = mass;
-        this.Radius = this.Mass * 8;
-        this.Angle = 0;
-        this.AngleVelocity = 0;
-        this.AngleAcceleration = 0;
-        this.Velocity = new Vector2(
-            Utils.GetRandomSingle(-1, 1),
-            Utils.GetRandomSingle(-1, 1));
+        this.Velocity = Vector2.Zero;
         this.Acceleration = Vector2.Zero;
         this.Position = new Vector2(x, y);
-    }
-
-    public void ApplyForce(Vector2 force)
-    {
-        this.Acceleration += Vector2.Divide(force, this.Mass);
     }
     
     public void Update()
     {
+        var mouse = Input.GetMousePosition();
+        var dir = Vector2.Subtract(mouse, this.Position);
+        dir = Vector2.Normalize(dir);
+        dir = 0.5f * dir;
+        this.Acceleration = dir;
         this.Velocity += this.Acceleration;
+        this.Velocity = Vector2.Normalize(this.Velocity) * this.TopSpeed;
         this.Position += this.Velocity;
-        this.AngleAcceleration = this.Acceleration.X * 5;
-        this.AngleVelocity += this.AngleAcceleration;
-        this.AngleVelocity = 
-            RayMath.Clamp(this.AngleVelocity, -6f, 6f);
-        this.Angle += this.AngleVelocity;
-        this.Acceleration = Vector2.Zero;
     }
 
     public void Show()
     {
+        var angle = MathF.Atan2(this.Velocity.Y, this.Velocity.X);
+        var rect = new Rectangle(-15, -5, 30, 10);
         var camera = new Camera2D(
             this.Position, 
             Vector2.Zero, 
-            this.Angle, 
+            angle * RayMath.Rad2Deg, 
             1f);
         Graphics.BeginMode2D(camera);
-        Graphics.DrawCircle(0, 0, this.Radius, Color.Gray);
-        Graphics.DrawLineEx(
-            Vector2.Zero,
-            new Vector2(this.Radius, 0),
-            2f,
-            Color.Black);
+        Graphics.DrawRectangleLinesEx(rect, 2f, Color.Black);
         Graphics.EndMode2D();
+    }
+
+    public void CheckEdges(int width, int height)
+    {
+        if (this.Position.X > width)
+        {
+            this.Position = new Vector2(0, this.Position.Y);
+        }
+        else if (this.Position.X < 0)
+        {
+            this.Position = new Vector2(width, this.Position.Y);
+        }
+
+        if (this.Position.Y > height)
+        {
+            this.Position = new Vector2(this.Position.X, 0);
+        }
+        else if (this.Position.Y < 0)
+        {
+            this.Position = new Vector2(this.Position.X, height);
+        }
     }
 }

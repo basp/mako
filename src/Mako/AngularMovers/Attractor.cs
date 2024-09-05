@@ -3,7 +3,7 @@ using Raylib_CSharp;
 using Raylib_CSharp.Colors;
 using Raylib_CSharp.Rendering;
 
-namespace Mako;
+namespace Mako.AngularMovers;
 
 internal class Attractor
 {

@@ -10,7 +10,7 @@ using Raylib_CSharp.Textures;
 using Raylib_CSharp.Transformations;
 using Raylib_CSharp.Windowing;
 
-public static class AngularVelocityExample
+public static class Example
 {
     public static void Run()
     {
