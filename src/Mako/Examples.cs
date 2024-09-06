@@ -6,7 +6,7 @@ using Raylib_CSharp.Colors;
 
 public static class Examples
 {
-    public static ISketch Sketch1()
+    public static ISketch Sketch0()
     {
         const int width = 1280;
         const int height = 720;
@@ -16,75 +16,75 @@ public static class Examples
         var deltas = Enumerable.Range(0, N)
             .Select(i => i * MathF.PI * 2f / N)
             .ToArray();
-            
+
+        var oscillators = Enumerable
+            .Range(0, N)
+            .Select(_ => new Oscillator(width, height))
+            .ToArray();
+
         return new Sketch(width, height)
         {
             Setup = s =>
             {
                 s.Background(Color.White);
             },
-            Draw = (s, _) =>
+            Draw = (s, dt) =>
             {
-                s.SetAngleMode(AngleMode.Radians);
-                s.Fill(Color.White);
-                s.Stroke(Color.Black);
-                s.StrokeWeight(2.5f);
-
-                for(var i = 0; i < deltas.Length; i++)
-                {
-                    var d = deltas[i];
-                        
-                    var x = (width / 6f - 20f) * MathF.Cos(d);
-                    var y = (height / 6f - 20f) * MathF.Sin(d);
-
-                    var rotation = (MathF.PI * 2) * ((float)i / deltas.Length);
-
-                    s.Push();
-                    s.Rotate(rotation);
-                    s.Translate(width / 2f, height / 2f);
-                    s.Zoom(1.6f);
-                    s.Circle(x, y, 4);
-                    s.Pop();
-                }
-
-                if (s.FrameCount % 8 == 0)
-                {
-                    s.Background(new Color(255, 255, 255, 20));
-                }
-
-                for (var i = 0; i < deltas.Length; i++)
-                {
-                    deltas[i] += 0.02f;
-                }
+                Layer1(s, dt);
+                Layer2(s, dt);
+                Layer3(s, dt);
             },
         };
-    }
 
-    public static ISketch Sketch2()
-    {
-        const int width = 640;
-        const int height = 240;
-
-        var oscillators = Enumerable
-            .Range(0, 10)
-            .Select(_ => new Oscillator(width, height))
-            .ToArray();
-
-        return new Sketch(width, height)
+        void Layer1(ISketch s, float _)
         {
-            Draw = (s, _) =>
+            s.SetAngleMode(AngleMode.Radians);
+            s.Fill(Color.White);
+            s.Stroke(Color.Black);
+            s.StrokeWeight(2.5f);
+
+            for (var i = 0; i < deltas.Length; i++)
             {
-                s.Background(Color.White);
-                foreach (var osc in oscillators)
-                {
-                    osc.Update();
-                    osc.Show(s);
-                }
-            },
-        };
+                var d = deltas[i];
+
+                var x = (width / 6f - 20f) * MathF.Cos(d);
+                var y = (height / 6f - 20f) * MathF.Sin(d);
+
+                var rotation = (MathF.PI * 2) * ((float)i / deltas.Length);
+
+                s.Push();
+                s.Rotate(rotation);
+                s.Translate(width / 2f, height / 2f);
+                s.Zoom(1.6f);
+                s.Circle(x, y, 4);
+                s.Pop();
+            }
+
+            for (var i = 0; i < deltas.Length; i++)
+            {
+                deltas[i] += 0.02f;
+            }
+        }
+
+        void Layer2(ISketch s, float _)
+        {
+            foreach (var osc in oscillators)
+            {
+                osc.Update();
+                osc.Show(s);
+            }
+        }
+
+        void Layer3(ISketch s, float _)
+        {
+            if (s.FrameCount % 8 == 0)
+            {
+                s.Background(new Color(255, 255, 255, 50));
+            }
+        }
     }
 
-    class Oscillator(int width, int height)
+    private class Oscillator(int width, int height)
     {
         private Vector2 angle = Vector2.Zero;
 
@@ -110,7 +110,6 @@ public static class Examples
             s.Stroke(Color.Black);
             s.StrokeWeight(2f);
             s.Fill(new Color(127, 127, 127, 255));
-            s.Line(0, 0, x, y);
             s.Circle(x, y, 16);
             s.Pop();
         }

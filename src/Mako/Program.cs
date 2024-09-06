@@ -6,6 +6,6 @@ internal static class Program
 {
     public static void Main(string[] _)
     {
-        Showcase.Sketch0().Run();
+        Examples.Sketch0().Run();
     }
 }
