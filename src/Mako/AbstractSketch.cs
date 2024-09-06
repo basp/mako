@@ -10,7 +10,7 @@ using Raylib_CSharp.Textures;
 using Raylib_CSharp.Transformations;
 using Raylib_CSharp.Windowing;
 
-internal abstract class AbstractSketch : ISketch
+public abstract class AbstractSketch : ISketch
 {
     private Context context = new(
         new Color(0, 0, 0, 0),

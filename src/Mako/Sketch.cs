@@ -1,6 +1,6 @@
 ﻿namespace Mako;
 
-internal class Sketch : AbstractSketch
+public class Sketch : AbstractSketch
 {
     public Sketch(int width, int height)
         : base(width, height)
