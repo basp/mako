@@ -11,14 +11,14 @@ public static class Examples
         const int width = 1280;
         const int height = 720;
 
-        const int N = 40;
+        const int N = 22;
 
         var deltas = Enumerable.Range(0, N)
             .Select(i => i * MathF.PI * 2f / N)
             .ToArray();
 
         var oscillators = Enumerable
-            .Range(0, N)
+            .Range(0, N / 2)
             .Select(_ => new Oscillator(width, height))
             .ToArray();
 
@@ -30,6 +30,8 @@ public static class Examples
             },
             Draw = (s, dt) =>
             {
+                s.Zoom(1.6f);
+                
                 Layer1(s, dt);
                 Layer2(s, dt);
                 Layer3(s, dt);
@@ -39,7 +41,7 @@ public static class Examples
         void Layer1(ISketch s, float _)
         {
             s.SetAngleMode(AngleMode.Radians);
-            s.Fill(Color.White);
+            s.Fill(Color.Pink);
             s.Stroke(Color.Black);
             s.StrokeWeight(2.5f);
 
@@ -55,8 +57,7 @@ public static class Examples
                 s.Push();
                 s.Rotate(rotation);
                 s.Translate(width / 2f, height / 2f);
-                s.Zoom(1.6f);
-                s.Circle(x, y, 4);
+                s.Circle(x, y, 8);
                 s.Pop();
             }
 
@@ -77,9 +78,9 @@ public static class Examples
 
         void Layer3(ISketch s, float _)
         {
-            if (s.FrameCount % 8 == 0)
+            if (s.FrameCount % 4 == 0)
             {
-                s.Background(new Color(255, 255, 255, 50));
+                s.Background(new Color(255, 255, 255, 3));
             }
         }
     }
@@ -109,8 +110,8 @@ public static class Examples
             s.Translate(s.Width / 2f, s.Height / 2f);
             s.Stroke(Color.Black);
             s.StrokeWeight(2f);
-            s.Fill(new Color(127, 127, 127, 255));
-            s.Circle(x, y, 16);
+            s.Fill(new Color(255, 255, 255, 255));
+            s.Circle(x, y, 8);
             s.Pop();
         }
     }
