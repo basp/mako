@@ -29,25 +29,31 @@ public abstract class AbstractSketch : ISketch
     
     private readonly Stack<Context> stack = new();
 
+    /// <inheritdoc cref="ISketch.Width"/> 
     public int Width { get; }
 
+    /// <inheritdoc cref="ISketch.Height"/>
     public int Height { get; }
 
+    /// <inheritdoc cref="ISketch.Clear"/>
     public void Clear()
     {
         Graphics.ClearBackground(new Color(0, 0, 0, 0));
     }
     
+    /// <inheritdoc cref="ISketch.Push"/>
     public void Push()
     {
         this.stack.Push(this.context);
     }
-
+    
+    /// <inheritdoc cref="ISketch.Pop"/>
     public void Pop()
     {
         this.context = this.stack.Pop();
     }
 
+    /// <inheritdoc cref="ISketch.Background"/>
     public void Background(Color color)
     {
         // Graphics.ClearBackground(color);
@@ -55,6 +61,7 @@ public abstract class AbstractSketch : ISketch
         Graphics.DrawRectangleRec(rect, color);
     }
 
+    /// <inheritdoc cref="ISketch.Translate"/>
     public void Translate(float dx, float dy)
     {
         this.context = this.context with
@@ -63,6 +70,7 @@ public abstract class AbstractSketch : ISketch
         };
     }
 
+    /// <inheritdoc cref="ISketch.Rotate"/>
     public void Rotate(float angle)
     {
         this.context = this.context with
@@ -71,6 +79,7 @@ public abstract class AbstractSketch : ISketch
         };
     }
 
+    /// <inheritdoc cref="ISketch.Fill"/>
     public void Fill(Color color)
     {
         this.context = this.context with
@@ -79,6 +88,7 @@ public abstract class AbstractSketch : ISketch
         };
     }
 
+    /// <inheritdoc cref="ISketch.Stroke"/>
     public void Stroke(Color color)
     {
         this.context = this.context with
@@ -87,6 +97,7 @@ public abstract class AbstractSketch : ISketch
         };
     }
 
+    /// <inheritdoc cref="ISketch.StrokeWeight"/>
     public void StrokeWeight(float value)
     {
         this.context = this.context with
@@ -95,6 +106,7 @@ public abstract class AbstractSketch : ISketch
         };
     }
 
+    /// <inheritdoc cref="ISketch.SetRectMode"/>
     public void SetRectMode(RectMode mode)
     {
         this.context = this.context with
@@ -103,6 +115,7 @@ public abstract class AbstractSketch : ISketch
         };
     }
 
+    /// <inheritdoc cref="ISketch.NoFill"/>
     public void NoFill()
     {
         this.context = this.context with
@@ -111,6 +124,7 @@ public abstract class AbstractSketch : ISketch
         };
     }
 
+    /// <inheritdoc cref="ISketch.NoStroke"/>
     public void NoStroke()
     {
         this.context = this.context with
@@ -119,6 +133,7 @@ public abstract class AbstractSketch : ISketch
         };
     }
     
+    /// <inheritdoc cref="ISketch.Circle"/>
     public void Circle(float x, float y, float radius)
     {            
         var camera = new Camera2D(
