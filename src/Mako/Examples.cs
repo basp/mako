@@ -1,9 +1,10 @@
-﻿using System.Runtime.CompilerServices;
+﻿namespace Mako;
+
+using System.Numerics;
+
 using Raylib_CSharp.Colors;
 
-namespace Mako;
-
-public static class Examples_
+public static class Examples
 {
     public static ISketch Sketch1()
     {
@@ -57,5 +58,61 @@ public static class Examples_
                 }
             },
         };
+    }
+
+    public static ISketch Sketch2()
+    {
+        const int width = 640;
+        const int height = 240;
+
+        var oscillators = Enumerable
+            .Range(0, 10)
+            .Select(_ => new Oscillator(width, height))
+            .ToArray();
+
+        return new Sketch(width, height)
+        {
+            Draw = (s, _) =>
+            {
+                s.Background(Color.White);
+                foreach (var osc in oscillators)
+                {
+                    osc.Update();
+                    osc.Show(s);
+                }
+            },
+        };
+    }
+
+    class Oscillator(int width, int height)
+    {
+        private Vector2 angle = Vector2.Zero;
+
+        private readonly Vector2 angleVelocity = new(
+            Utils.GetRandomSingle(-0.05f, 0.05f),
+            Utils.GetRandomSingle(-0.05f, 0.05f));
+
+        private readonly Vector2 amplitude = new(
+            Utils.GetRandomSingle(20, width / 2f),
+            Utils.GetRandomSingle(20, height / 2f));
+
+        public void Update()
+        {
+            this.angle += this.angleVelocity;
+        }
+
+        public void Show(ISketch s)
+        {
+            var x = MathF.Sin(this.angle.X) * this.amplitude.X;
+            var y = MathF.Sin(this.angle.Y) * this.amplitude.Y;
+            s.Push();
+            s.Translate(s.Width / 2f, s.Height / 2f);
+            s.Stroke(Color.Black);
+            s.StrokeWeight(2f);
+            s.Fill(new Color(127, 127, 127, 255));
+            s.Line(0, 0, x, y);
+            s.Circle(x, y, 16);
+            s.Pop();
+        }
     }
 }
