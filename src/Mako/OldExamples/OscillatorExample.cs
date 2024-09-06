@@ -1,7 +1,4 @@
-﻿using Raylib_CSharp.Colors;
-using Raylib_CSharp.Rendering;
-
-namespace Mako;
+﻿namespace Mako.OldExamples;
 
 public class OscillatorExample(int width, int height) : SketchOld(width, height)
 {

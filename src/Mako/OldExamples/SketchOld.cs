@@ -1,4 +1,4 @@
-﻿namespace Mako;
+﻿namespace Mako.OldExamples;
 
 using System.Numerics;
 

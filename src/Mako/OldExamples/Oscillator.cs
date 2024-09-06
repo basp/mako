@@ -1,9 +1,9 @@
-﻿using System.Numerics;
+﻿namespace Mako.OldExamples;
+
+using System.Numerics;
 using Raylib_CSharp.Camera.Cam2D;
 using Raylib_CSharp.Colors;
 using Raylib_CSharp.Rendering;
-
-namespace Mako;
 
 public class Oscillator
 {

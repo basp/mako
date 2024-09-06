@@ -1,7 +1,7 @@
-﻿using Raylib_CSharp.Colors;
-using Raylib_CSharp.Rendering;
+﻿namespace Mako.OldExamples;
 
-namespace Mako;
+using Raylib_CSharp.Colors;
+using Raylib_CSharp.Rendering;
 
 public class PolarAngleExample(int width, int height) 
     : SketchOld(width, height)

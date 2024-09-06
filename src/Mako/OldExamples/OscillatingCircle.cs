@@ -1,9 +1,7 @@
-﻿using Raylib_CSharp;
+﻿namespace Mako.OldExamples;
+
 using Raylib_CSharp.Colors;
 using Raylib_CSharp.Rendering;
-using Raylib_CSharp.Windowing;
-
-namespace Mako;
 
 public class OscillatingCircle(int width, int height) : SketchOld(width, height)
 {

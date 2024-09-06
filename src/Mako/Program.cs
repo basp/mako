@@ -10,7 +10,7 @@ internal static class Program
         sketch.Run();
         return;
         
-        AbstractSketch Sketch1()
+        ISketch Sketch1()
         {
             const int width = 640;
             const int height = 240;
