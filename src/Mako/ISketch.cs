@@ -5,6 +5,11 @@ using Raylib_CSharp.Colors;
 public interface ISketch
 {
     /// <summary>
+    /// Tracks the number of frames drawn since the sketch started.
+    /// </summary>
+    int FrameCount { get; }
+    
+    /// <summary>
     /// The width (in pixels) of the sketch.
     /// </summary>
     int Width { get; }
@@ -13,6 +18,22 @@ public interface ISketch
     /// The height (in pixels) of the sketch.
     /// </summary>
     int Height { get; }
+
+    /// <summary>
+    /// Converts an angle measured in degrees to its value in radians.
+    /// </summary>
+    float Radians(float degrees);
+
+    /// <summary>
+    /// Converts an angle measured in radians to its value in degrees.
+    /// </summary>
+    float Degrees(float radians);
+    
+    /// <summary>
+    /// Changes the unit system used to measure angles.
+    /// </summary>
+    /// <param name="mode">The angle mode.</param>
+    void SetAngleMode(AngleMode mode);
     
     /// <summary>
     /// Begins a drawing group that contains its own styles and transformations.
@@ -45,6 +66,8 @@ public interface ISketch
     /// <param name="dy">The translation along the y-axis.</param>
     void Translate(float dx, float dy);
 
+    void Zoom(float value);
+    
     /// <summary>
     /// Rotates the coordinate system.
     /// </summary>

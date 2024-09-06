@@ -16,10 +16,12 @@ public abstract class AbstractSketch : ISketch
         new Color(0, 0, 0, 0),
         Vector2.Zero,
         0f,
+        1f,
         Color.White,
         Color.Black,
         2f,
-        RectMode.CORNER);
+        RectMode.Corner,
+        AngleMode.Radians);
 
     protected AbstractSketch(int width, int height)
     {
@@ -29,11 +31,17 @@ public abstract class AbstractSketch : ISketch
     
     private readonly Stack<Context> stack = new();
 
+    public int FrameCount { get; private set; }
+    
     /// <inheritdoc cref="ISketch.Width"/> 
     public int Width { get; }
 
     /// <inheritdoc cref="ISketch.Height"/>
     public int Height { get; }
+
+    public float Radians(float degrees) => degrees * RayMath.Deg2Rad;
+
+    public float Degrees(float radians) => radians * RayMath.Rad2Deg;
 
     /// <inheritdoc cref="ISketch.Clear"/>
     public void Clear()
@@ -56,9 +64,16 @@ public abstract class AbstractSketch : ISketch
     /// <inheritdoc cref="ISketch.Background"/>
     public void Background(Color color)
     {
-        // Graphics.ClearBackground(color);
         var rect = new Rectangle(0, 0, this.Width, this.Height);
         Graphics.DrawRectangleRec(rect, color);
+    }
+
+    public void Zoom(float value)
+    {
+        this.context = this.context with
+        {
+            Zoom = value,
+        };
     }
 
     /// <inheritdoc cref="ISketch.Translate"/>
@@ -114,6 +129,14 @@ public abstract class AbstractSketch : ISketch
             RectMode = mode,
         };
     }
+    
+    public void SetAngleMode(AngleMode mode)
+    {
+        this.context = this.context with
+        {
+            AngleMode = mode,
+        };
+    }
 
     /// <inheritdoc cref="ISketch.NoFill"/>
     public void NoFill()
@@ -136,11 +159,7 @@ public abstract class AbstractSketch : ISketch
     /// <inheritdoc cref="ISketch.Circle"/>
     public void Circle(float x, float y, float radius)
     {            
-        var camera = new Camera2D(
-            this.context.Translation, 
-            Vector2.Zero, 
-            this.context.Rotation, 
-            1f);
+        var camera = this.CreateCamera();
         Graphics.BeginMode2D(camera);
         var center = new Vector2(x, y);
         Graphics.DrawCircleV(
@@ -156,11 +175,7 @@ public abstract class AbstractSketch : ISketch
 
     public void Line(float x1, float y1, float x2, float y2)
     {
-        var camera = new Camera2D(
-            this.context.Translation, 
-            Vector2.Zero, 
-            this.context.Rotation, 
-            1f);
+        var camera = this.CreateCamera();
         Graphics.BeginMode2D(camera);
         var startPos = new Vector2(x1, y1);
         var endPos = new Vector2(x2, y2);
@@ -174,16 +189,12 @@ public abstract class AbstractSketch : ISketch
 
     public void Rect(float x, float y, float w, float h)
     {
-        var camera = new Camera2D(
-            this.context.Translation, 
-            Vector2.Zero, 
-            this.context.Rotation, 
-            1f);
+        var camera = this.CreateCamera();
         Graphics.BeginMode2D(camera);        
         var rectangle = new Rectangle(x, y, w, h);
         var origin = this.context.RectMode switch
         {
-            RectMode.CENTER => new Vector2(w / 2f, h / 2f),
+            RectMode.Center => new Vector2(w / 2f, h / 2f),
             _ => Vector2.Zero,
         };
         Graphics.DrawRectanglePro(
@@ -228,6 +239,8 @@ public abstract class AbstractSketch : ISketch
                 Vector2.Zero,
                 Color.White);
             Graphics.EndDrawing();
+
+            this.FrameCount += 1;
         }
         
         Window.Close();
@@ -236,13 +249,30 @@ public abstract class AbstractSketch : ISketch
     protected virtual void InternalSetup() {}
 
     protected abstract void InternalDraw(float dt);
+
+    private Camera2D CreateCamera()
+    {
+        var rotation = this.context.AngleMode switch
+        {
+            AngleMode.Radians => Utils.ToDegrees(this.context.Rotation),
+            _ => this.context.Rotation,
+        };
+            
+        return new Camera2D(
+            this.context.Translation, 
+            Vector2.Zero, 
+            rotation,
+            this.context.Zoom);   
+    }
     
     private record Context(
         Color Background,
         Vector2 Translation,
         float Rotation,
+        float Zoom,
         Color Fill,
         Color Stroke,
         float StrokeWeight,
-        RectMode RectMode);
+        RectMode RectMode,
+        AngleMode AngleMode);
 }
