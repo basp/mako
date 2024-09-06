@@ -1,5 +1,7 @@
 ﻿namespace Mako;
 
+using System.Numerics;
+
 using Raylib_CSharp;
 
 public static class Utils
@@ -14,4 +16,9 @@ public static class Utils
         var t = Utils.random.NextSingle();
         return RayMath.Lerp(min, max, t);
     }
+
+    public static Vector2 Vector2FromAngle(float angle, float length = 1f) =>
+        new Vector2(
+            length * MathF.Cos(angle),
+            length * MathF.Sin(angle));
 }

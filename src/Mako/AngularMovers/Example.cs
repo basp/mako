@@ -10,8 +10,8 @@ public static class Example
     private const int Width = 640;
     private const int Height = 240;
 
-    private static Mover[] movers;
-    private static Attractor attractor;
+    private static Mover[]? movers;
+    private static Attractor? attractor;
     
     public static void Run()
     {

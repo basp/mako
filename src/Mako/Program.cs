@@ -1,37 +1,33 @@
-﻿using System.Numerics;
+﻿namespace Mako;
 
-using Raylib_CSharp;
-using Raylib_CSharp.Camera.Cam2D;
-using Raylib_CSharp.Rendering;
-using Raylib_CSharp.Windowing;
 using Raylib_CSharp.Colors;
-using Raylib_CSharp.Transformations;
-
-namespace Mako;
 
 internal static class Program
 {
-    private const int Width = 640;
-    private const int Height = 240;
-
-    private static readonly Mover mover = new(320, 120);
-    
     public static void Main(string[] args)
     {
-        Window.Init(Program.Width, Program.Height, "Test");
-        Time.SetTargetFPS(60);
+        const int width = 640;
+        const int height = 240;
         
-        while (!Window.ShouldClose())
-        {
-            Graphics.BeginDrawing();
-            Graphics.ClearBackground(Color.RayWhite);
-            Program.mover.Update();
-            Program.mover.CheckEdges(Program.Width, Program.Height);
-            Program.mover.Show();
-            Graphics.EndDrawing();
-        }
+        var sketch = new SketchF(
+            s =>
+            {
+                s.Background(Color.White);
+            },
+            s =>
+            {
+                s.Fill(Color.Black);
+                s.Push();
+                s.Translate(width /2f, height / 2f);
+                s.SetRectMode(RectMode.CENTER);
+                s.Rect(0, 0, 200, 100);
+                s.Pop();
+                s.Rect(0, 0, 200, 100);
+            },
+            width,
+            height);
         
-        Window.Close();
+        sketch.Show();
     }
 }
 

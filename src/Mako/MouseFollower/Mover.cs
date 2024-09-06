@@ -1,11 +1,11 @@
-﻿using System.Numerics;
+﻿namespace Mako.MouseFollower;
+
+using System.Numerics;
 using Raylib_CSharp.Camera.Cam2D;
 using Raylib_CSharp.Colors;
 using Raylib_CSharp.Interact;
 using Raylib_CSharp.Rendering;
 using Raylib_CSharp.Transformations;
-
-namespace Mako;
 
 internal class Mover
 {
