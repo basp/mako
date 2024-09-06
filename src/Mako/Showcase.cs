@@ -18,7 +18,7 @@ public class Showcase
             Draw = (s, _) =>
             {
                 s.Stroke(Color.Black);
-                s.StrokeWeight(2f);
+                s.StrokeWeight(8f);
                 s.Fill(Color.Lime);
                 s.Rect(30, 30, 50, 50);
             },

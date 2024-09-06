@@ -191,16 +191,26 @@ public abstract class AbstractSketch : ISketch
     {
         var camera = this.CreateCamera();
         Graphics.BeginMode2D(camera);        
-        var rectangle = new Rectangle(x, y, w, h);
+        var outer = new Rectangle(x, y, w, h);
         var origin = this.context.RectMode switch
         {
             RectMode.Center => new Vector2(w / 2f, h / 2f),
             _ => Vector2.Zero,
         };
         Graphics.DrawRectanglePro(
-            rectangle, 
+            outer, 
             origin, 
             0f, 
+            this.context.Stroke);
+        var inner = new Rectangle(
+            x + this.context.StrokeWeight,
+            y + this.context.StrokeWeight,
+            w - (2 * this.context.StrokeWeight),
+            h - (2 * this.context.StrokeWeight));
+        Graphics.DrawRectanglePro(
+            inner,
+            origin,
+            0f,
             this.context.Fill);
         Graphics.EndMode2D();
     }
