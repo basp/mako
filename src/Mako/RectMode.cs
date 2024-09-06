@@ -1,6 +1,6 @@
 ﻿namespace Mako;
 
-internal enum RectMode
+public enum RectMode
 {
     CORNER,
     CENTER,
