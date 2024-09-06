@@ -1,4 +1,5 @@
-﻿using Raylib_CSharp.Colors;
+﻿using System.Runtime.CompilerServices;
+using Raylib_CSharp.Colors;
 
 namespace Mako;
 
@@ -45,7 +46,10 @@ public static class Examples_
                     s.Pop();
                 }
 
-                s.Background(new Color(255, 255, 255, 2));
+                if (s.FrameCount % 8 == 0)
+                {
+                    s.Background(new Color(255, 255, 255, 20));
+                }
 
                 for (var i = 0; i < deltas.Length; i++)
                 {
