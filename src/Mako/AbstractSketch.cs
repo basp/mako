@@ -48,6 +48,9 @@ public abstract class AbstractSketch : ISketch
     {
         Graphics.ClearBackground(new Color(0, 0, 0, 0));
     }
+
+    public float Lerp(float a, float b, float t) =>
+        RayMath.Lerp(a, b, t);
     
     /// <inheritdoc cref="ISketch.Push"/>
     public void Push()
@@ -61,6 +64,19 @@ public abstract class AbstractSketch : ISketch
         this.context = this.stack.Pop();
     }
 
+    public float Map(
+        float value,
+        float start1,
+        float stop1,
+        float start2,
+        float stop2) =>
+            RayMath.Remap(
+                value, 
+                start1, 
+                stop1, 
+                start2, 
+                stop2);
+    
     /// <inheritdoc cref="ISketch.Background"/>
     public void Background(Color color)
     {
@@ -160,25 +176,29 @@ public abstract class AbstractSketch : ISketch
     public void Circle(float x, float y, float radius)
     {            
         var camera = this.CreateCamera();
-        Graphics.BeginMode2D(camera);
         var center = new Vector2(x, y);
+        Graphics.BeginMode2D(camera);
         Graphics.DrawCircleV(
             center, 
             radius, 
-            this.context.Stroke);
-        Graphics.DrawCircleV(
-            center, 
-            radius - this.context.StrokeWeight, 
             this.context.Fill);
+        Graphics.DrawRing(
+            center, 
+            radius - this.context.StrokeWeight,
+            radius,
+            0,
+            360,
+            0,
+            this.context.Stroke);
         Graphics.EndMode2D();
     }
 
     public void Line(float x1, float y1, float x2, float y2)
     {
         var camera = this.CreateCamera();
-        Graphics.BeginMode2D(camera);
         var startPos = new Vector2(x1, y1);
         var endPos = new Vector2(x2, y2);
+        Graphics.BeginMode2D(camera);
         Graphics.DrawLineEx(
             startPos, 
             endPos, 
@@ -190,31 +210,23 @@ public abstract class AbstractSketch : ISketch
     public void Rect(float x, float y, float w, float h)
     {
         var camera = this.CreateCamera();
-        Graphics.BeginMode2D(camera);        
-        var outer = new Rectangle(x, y, w, h);
         var origin = this.context.RectMode switch
         {
-            RectMode.Center => new Vector2(w / 2f, h / 2f),
-            _ => Vector2.Zero,
+            RectMode.Center => new Vector2(x - (w / 2f), y - (h / 2f)),
+            _ => new Vector2(x, y),
         };
-        Graphics.DrawRectanglePro(
-            outer, 
-            origin, 
-            0f, 
-            this.context.Stroke);
-        var inner = new Rectangle(
-            x + this.context.StrokeWeight,
-            y + this.context.StrokeWeight,
-            w - (2 * this.context.StrokeWeight),
-            h - (2 * this.context.StrokeWeight));
-        Graphics.DrawRectanglePro(
-            inner,
-            origin,
-            0f,
+        var rect = new Rectangle(origin.X, origin.Y, w, h);
+        Graphics.BeginMode2D(camera);
+        Graphics.DrawRectangleRec(
+            rect,
             this.context.Fill);
+        Graphics.DrawRectangleLinesEx(
+            rect,
+            this.context.StrokeWeight,
+            this.context.Stroke);
         Graphics.EndMode2D();
     }
-    
+
     /// <summary>
     /// Initializes a window and runs the sketch.
     /// </summary>
@@ -248,6 +260,7 @@ public abstract class AbstractSketch : ISketch
                 source,
                 Vector2.Zero,
                 Color.White);
+            Graphics.DrawFPS(10, 10);
             Graphics.EndDrawing();
 
             this.FrameCount += 1;

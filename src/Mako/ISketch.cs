@@ -20,6 +20,22 @@ public interface ISketch
     int Height { get; }
 
     /// <summary>
+    /// Re-maps a number from one range to another.
+    /// </summary>
+    /// <param name="value">The value to be remapped.</param>
+    /// <param name="start1">The lower bound of the value's current range.</param>
+    /// <param name="stop1">The upper bound of the value's current range.</param>
+    /// <param name="start2">The lower bound of the value's target range.</param>
+    /// <param name="stop2">The upper bound of the value's target range.</param>
+    /// <returns></returns>
+    float Map(
+        float value,
+        float start1,
+        float stop1,
+        float start2,
+        float stop2);
+    
+    /// <summary>
     /// Converts an angle measured in degrees to its value in radians.
     /// </summary>
     float Radians(float degrees);
@@ -108,10 +124,30 @@ public interface ISketch
     /// </summary>
     void NoStroke();
 
+    /// <summary>
+    /// Draws a circle.
+    /// </summary>
+    /// <param name="x">The x-coordinate of the center of the circle.</param>
+    /// <param name="y">The y-coordinate of the center of the circle.</param>
+    /// <param name="radius">The radius of the circle.</param>
     void Circle(float x, float y, float radius);
 
+    /// <summary>
+    /// Draws a straight line between two points.
+    /// </summary>
+    /// <param name="x1">The x-coordinate of the first point.</param>
+    /// <param name="y1">The y-coordinate of the first point.</param>
+    /// <param name="x2">The x-coordinate of the second point.</param>
+    /// <param name="y2">The y-coordinate of the second point.</param>
     void Line(float x1, float y1, float x2, float y2);
 
+    /// <summary>
+    /// Draws a rectangle.
+    /// </summary>
+    /// <param name="x">The x-coordinate of the rectangle.</param>
+    /// <param name="y">The y-coordinate of the rectangle.</param>
+    /// <param name="w">The width of the rectangle.</param>
+    /// <param name="h">The height of the rectangle.</param>
     void Rect(float x, float y, float w, float h);
 
     void Run();

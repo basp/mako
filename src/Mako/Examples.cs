@@ -11,14 +11,14 @@ public static class Examples
         const int width = 1280;
         const int height = 720;
 
-        const int N = 22;
+        const int N = 32;
 
         var deltas = Enumerable.Range(0, N)
             .Select(i => i * MathF.PI * 2f / N)
             .ToArray();
 
         var oscillators = Enumerable
-            .Range(0, N / 2)
+            .Range(0, N / 8)
             .Select(_ => new Oscillator(width, height))
             .ToArray();
 
@@ -30,8 +30,6 @@ public static class Examples
             },
             Draw = (s, dt) =>
             {
-                s.Zoom(1.6f);
-                
                 Layer1(s, dt);
                 Layer2(s, dt);
                 Layer3(s, dt);
@@ -109,9 +107,9 @@ public static class Examples
             s.Push();
             s.Translate(s.Width / 2f, s.Height / 2f);
             s.Stroke(Color.Black);
-            s.StrokeWeight(2f);
-            s.Fill(new Color(255, 255, 255, 255));
-            s.Circle(x, y, 8);
+            s.StrokeWeight(1f);
+            s.Fill(new Color(20, 200, 240, 255));
+            s.Circle(x, y, 5);
             s.Pop();
         }
     }
