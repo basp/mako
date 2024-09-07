@@ -17,13 +17,23 @@ internal static class Showcase
         {
             Setup = s =>
             {
+                // Draw a white background.
                 s.Background(Color.White);
             },
             Draw = (s, _) =>
             {
+                // Set stroke color (for shape outlines).
                 s.Stroke(Color.Black);
+                
+                // Set stroke width (weight) to 8 pixels.
                 s.StrokeWeight(8f);
+                
+                // Set shape fill color to lime-green.
                 s.Fill(Color.Lime);
+                
+                // Draw a (square) rectangle with top-left
+                // corner at pixel (30, 30) and width and
+                // height set to 50 pixels.
                 s.Rect(30, 30, 50, 50);
             },
         };
