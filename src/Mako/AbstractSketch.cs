@@ -13,7 +13,6 @@ using Raylib_CSharp.Windowing;
 public abstract class AbstractSketch : ISketch
 {
     private Context context = new(
-        new Color(0, 0, 0, 0),
         Vector2.Zero,
         0f,
         1f,
@@ -207,6 +206,34 @@ public abstract class AbstractSketch : ISketch
         Graphics.EndMode2D();
     }
 
+    public void Ellipse(
+        float x, 
+        float y, 
+        float w,
+        float h)
+    {
+        var radiusH = w / 2f;
+        var radiusV = h / 2f;
+        var camera = this.CreateCamera();
+        Graphics.BeginMode2D(camera);
+        Graphics.DrawEllipse(
+            (int)x,
+            (int)y,
+            radiusH,
+            radiusV,
+            this.context.Fill);
+        for (var i = 0f; i < this.context.StrokeWeight; i += 0.5f)
+        {
+            Graphics.DrawEllipseLines(
+                (int)x,
+                (int)y,
+                radiusH - i,
+                radiusV - i,
+                this.context.Stroke);
+        }
+        Graphics.EndMode2D();
+    }
+
     public void Rect(float x, float y, float w, float h)
     {
         var camera = this.CreateCamera();
@@ -260,7 +287,7 @@ public abstract class AbstractSketch : ISketch
                 source,
                 Vector2.Zero,
                 Color.White);
-            Graphics.DrawFPS(10, 10);
+            // Graphics.DrawFPS(10, 10);
             Graphics.EndDrawing();
 
             this.FrameCount += 1;
@@ -268,7 +295,12 @@ public abstract class AbstractSketch : ISketch
         
         Window.Close();
     }
-    
+
+    public void SetEllipseMode(EllipseMode mode)
+    {
+        throw new NotImplementedException();
+    }
+
     protected virtual void InternalSetup() {}
 
     protected abstract void InternalDraw(float dt);
@@ -289,7 +321,6 @@ public abstract class AbstractSketch : ISketch
     }
     
     private record Context(
-        Color Background,
         Vector2 Translation,
         float Rotation,
         float Zoom,

@@ -8,16 +8,29 @@ public interface ISketch
     /// Tracks the number of frames drawn since the sketch started.
     /// </summary>
     int FrameCount { get; }
-    
-    /// <summary>
-    /// The width (in pixels) of the sketch.
-    /// </summary>
-    int Width { get; }
-    
+
     /// <summary>
     /// The height (in pixels) of the sketch.
     /// </summary>
     int Height { get; }
+
+    /// <summary>
+    /// The width (in pixels) of the sketch.
+    /// </summary>
+    int Width { get; }
+
+    /// <summary>
+    /// Clears the pixels on the canvas.
+    /// </summary>
+    /// <remarks>
+    /// <code>Clear()</code> makes every pixel 100% transparent.
+    /// </remarks>
+    void Clear();
+
+    /// <summary>
+    /// Converts an angle measured in radians to its value in degrees.
+    /// </summary>
+    float Degrees(float radians);
 
     /// <summary>
     /// Re-maps a number from one range to another.
@@ -34,41 +47,28 @@ public interface ISketch
         float stop1,
         float start2,
         float stop2);
-    
+
     /// <summary>
     /// Converts an angle measured in degrees to its value in radians.
     /// </summary>
     float Radians(float degrees);
 
     /// <summary>
-    /// Converts an angle measured in radians to its value in degrees.
-    /// </summary>
-    float Degrees(float radians);
-    
-    /// <summary>
     /// Changes the unit system used to measure angles.
     /// </summary>
     /// <param name="mode">The angle mode.</param>
     void SetAngleMode(AngleMode mode);
-    
+
     /// <summary>
     /// Begins a drawing group that contains its own styles and transformations.
     /// </summary>
     void Push();
-    
+
     /// <summary>
     /// Ends a drawing group that contains its own styles and transformations.
     /// </summary>
     void Pop();
-    
-    /// <summary>
-    /// Clears the pixels on the canvas.
-    /// </summary>
-    /// <remarks>
-    /// <code>Clear()</code> makes every pixel 100% transparent.
-    /// </remarks>
-    void Clear();
-    
+
     /// <summary>
     /// Sets the color used for the background of the canvas.
     /// </summary>
@@ -83,13 +83,13 @@ public interface ISketch
     void Translate(float dx, float dy);
 
     void Zoom(float value);
-    
+
     /// <summary>
     /// Rotates the coordinate system.
     /// </summary>
     /// <param name="angle">The rotation angle.</param>
     void Rotate(float angle);
-    
+
     /// <summary>
     /// Sets the color used to fill shapes.
     /// </summary>
@@ -142,6 +142,24 @@ public interface ISketch
     void Line(float x1, float y1, float x2, float y2);
 
     /// <summary>
+    /// Draws an arc.
+    /// </summary>
+    /// <param name="x">The x-coordinate of the arc's ellipse.</param>
+    /// <param name="y">The y-coordinate of the arc's ellipse.</param>
+    /// <param name="w">The width of the arc's ellipse by default.</param>
+    /// <param name="h">The height of the arc's ellipse by default.</param>
+    /// <param name="start">Angle to start the arc.</param>
+    /// <param name="stop">Angle to stop the arc.</param>
+    /// <param name="mode">
+    /// Optional parameter to determine the way of drawing the arc.
+    /// </param>
+    void Ellipse(
+        float x,
+        float y,
+        float w,
+        float h);
+    
+    /// <summary>
     /// Draws a rectangle.
     /// </summary>
     /// <param name="x">The x-coordinate of the rectangle.</param>
@@ -151,4 +169,6 @@ public interface ISketch
     void Rect(float x, float y, float w, float h);
 
     void Run();
+
+    void SetEllipseMode(EllipseMode mode);
 }
