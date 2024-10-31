@@ -19,7 +19,8 @@ public class Sketch
         Color.Black,
         2f,
         RectMode.Corner,
-        AngleMode.Radians);
+        AngleMode.Radians,
+        BlendMode.Alpha);
     
     private readonly Random random = new();
     
@@ -31,11 +32,13 @@ public class Sketch
         this.Height = height;
     }
 
-    public int FrameCount { get; private set; }
+    public long FrameCount { get; private set; }
     
     public int Width { get; }
     
     public int Height { get; }
+
+    public BlendMode GlobalBlendMode { get; init; } = BlendMode.Alpha;
 
     public Action<Sketch> Setup { get; init; } = _ => { };
 
@@ -94,7 +97,10 @@ public class Sketch
     public void Background(Color color)
     {
         var rect = new Rectangle(0, 0, this.Width, this.Height);
+        
+        Graphics.BeginBlendMode(this.context.BlendMode);
         Graphics.DrawRectangleRec(rect, color);
+        Graphics.EndBlendMode();
     }
     
     public void Clear()
@@ -141,11 +147,21 @@ public class Sketch
             AngleMode = mode,
         };
     }
+
+    public void SetBlendMode(BlendMode mode)
+    {
+        this.context = this.context with
+        {
+            BlendMode = mode,
+        };
+    }
     
     public void Circle(float x, float y, float radius)
     {            
         var camera = this.CreateCamera();
         var center = new Vector2(x, y);
+        
+        Graphics.BeginBlendMode(this.context.BlendMode);
         Graphics.BeginMode2D(camera);
         Graphics.DrawCircleV(
             center, 
@@ -160,6 +176,7 @@ public class Sketch
             0,
             this.context.Stroke);
         Graphics.EndMode2D();
+        Graphics.EndBlendMode();
     }
 
     public void Line(float x1, float y1, float x2, float y2)
@@ -167,6 +184,8 @@ public class Sketch
         var camera = this.CreateCamera();
         var startPos = new Vector2(x1, y1);
         var endPos = new Vector2(x2, y2);
+        
+        Graphics.BeginBlendMode(this.context.BlendMode);
         Graphics.BeginMode2D(camera);
         Graphics.DrawLineEx(
             startPos, 
@@ -174,6 +193,7 @@ public class Sketch
             this.context.StrokeWeight, 
             this.context.Stroke);
         Graphics.EndMode2D();
+        Graphics.EndBlendMode();
     }    
     
     public void Rect(float x, float y, float w, float h)
@@ -186,6 +206,8 @@ public class Sketch
         };
         
         var rect = new Rectangle(origin.X, origin.Y, w, h);
+        
+        Graphics.BeginBlendMode(this.context.BlendMode);
         Graphics.BeginMode2D(camera);
         Graphics.DrawRectangleRec(
             rect,
@@ -195,8 +217,16 @@ public class Sketch
             this.context.StrokeWeight,
             this.context.Stroke);
         Graphics.EndMode2D();
+        Graphics.EndBlendMode();
     }
-    
+
+    public void DrawScoped(Action<Sketch> sketch)
+    {
+        this.Push();
+        sketch(this);
+        this.Pop();
+    }
+        
     public void Run()
     {
         Window.Init(this.Width, this.Height, "Sketch");
@@ -215,8 +245,6 @@ public class Sketch
         
         while (!Window.ShouldClose())
         {
-            this.FrameCount += 1;
-            
             var dt = Time.GetFrameTime();
             
             Graphics.BeginTextureMode(canvas);
@@ -226,14 +254,14 @@ public class Sketch
             Graphics.EndTextureMode();
             
             Graphics.BeginDrawing();
-            Graphics.BeginBlendMode(BlendMode.AlphaPremultiply);
+            Graphics.BeginBlendMode(this.GlobalBlendMode);
             Graphics.DrawTextureRec(
                 canvas.Texture,
                 source,
                 Vector2.Zero,
                 Color.White);
             Graphics.EndBlendMode();
-            // Graphics.DrawFPS(10, 10);
+            Graphics.DrawFPS(10, 10);
             Graphics.EndDrawing();
 
             this.FrameCount += 1;
@@ -275,5 +303,6 @@ public class Sketch
         Color Stroke,
         float StrokeWeight,
         RectMode RectMode,
-        AngleMode AngleMode);
+        AngleMode AngleMode,
+        BlendMode BlendMode);
 }

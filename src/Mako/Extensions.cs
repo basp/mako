@@ -8,6 +8,9 @@ using Raylib_CSharp;
 
 public static class Extensions
 {
+    public static float Constrain(this float self, float low, float high) =>
+        MathF.Max(Math.Min(self, high), low);
+    
     public static float HeadingInDegrees(this Vector2 u) =>
         MathF.Atan2(u.Y, u.X) * RayMath.Rad2Deg;
 
