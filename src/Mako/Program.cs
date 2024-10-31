@@ -4,6 +4,6 @@ internal static class Program
 {
     public static void Main(string[] _)
     {
-        Example08.Run();
+        Example09.Run();
     }
 }
