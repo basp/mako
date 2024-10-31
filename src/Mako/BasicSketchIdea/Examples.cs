@@ -1,4 +1,4 @@
-﻿namespace Mako;
+﻿namespace BasicSketchIdea.Mako;
 
 using System.Numerics;
 

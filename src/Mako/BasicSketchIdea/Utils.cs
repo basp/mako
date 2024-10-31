@@ -1,6 +1,7 @@
-﻿namespace Mako;
+﻿namespace BasicSketchIdea.Mako;
 
 using System.Numerics;
+
 using Raylib_CSharp;
 
 public static class Utils
