@@ -1,13 +1,13 @@
-﻿using System.Numerics;
+﻿namespace Mako;
+
+using System.Numerics;
 using Raylib_CSharp;
 using Raylib_CSharp.Colors;
 using Raylib_CSharp.Rendering;
 
-namespace Mako;
-
 internal static class Example09
 {
-    private static float G = 1;
+    private static float G = 1.2f;
     
     private class Body
     {
@@ -68,8 +68,6 @@ internal static class Example09
     {
         const int width = 640;
         const int height = 640;
-        
-        const float velocity = 1;
 
         var bodies = new List<Body>();
         
@@ -107,6 +105,7 @@ internal static class Example09
                     {
                         if (i == j)
                         {
+                            // Don't attract ourself.
                             continue;
                         }
 
