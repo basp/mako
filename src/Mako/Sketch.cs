@@ -18,7 +18,7 @@ public class Sketch
         Color.White,
         Color.Black,
         2f,
-        RectMode.Corner,
+        RectMode.Center,
         AngleMode.Radians,
         BlendMode.Alpha);
     
