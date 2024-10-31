@@ -7,6 +7,14 @@ using Raylib_CSharp.Transformations;
 
 public static class Intersect
 {
+    public static bool CircleRec(
+        Vector2 center,
+        float radius,
+        Rectangle rec)
+    {
+        throw new NotImplementedException();
+    }
+    
     public static bool Circles(
         Vector2 center1,
         float radius1,

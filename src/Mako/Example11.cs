@@ -1,4 +1,7 @@
-﻿namespace Mako;
+﻿using Raylib_CSharp.Rendering;
+using Raylib_CSharp.Transformations;
+
+namespace Mako;
 
 using System.Numerics;
 using Raylib_CSharp.Colors;
@@ -71,7 +74,7 @@ internal static class Example11
     {
         public bool IsActive { get; set; } = true;
 
-        private void DrawCircle(Sketch scope)
+        private void DrawAsCircle(Sketch scope)
         {
             scope.Circle(
                 this.Position.X,
@@ -79,7 +82,7 @@ internal static class Example11
                 this.Radius);
         }
 
-        private void DrawRect(Sketch scope)
+        private void DrawAsRect(Sketch scope)
         {
             scope.Rect(
                 this.Position.X,
@@ -97,7 +100,7 @@ internal static class Example11
                     : new Color(0, 0, 0, 0);
                 scope.Fill(fill);
                 scope.StrokeWeight(0);
-                this.DrawRect(scope);
+                this.DrawAsRect(scope);
             });
         }
 
@@ -125,16 +128,31 @@ internal static class Example11
     
     private class Neutron(Sketch s) : Body(s)
     {
+        private void DrawAsCircle(Sketch scope)
+        {
+            scope.Circle(
+                this.Position.X,
+                this.Position.Y,
+                this.Radius);
+        }
+
+        private void DrawAsRect(Sketch scope)
+        {
+            scope.Rect(
+                this.Position.X,
+                this.Position.Y,
+                this.Radius,
+                this.Radius);
+        }
+        
         public override void Draw()
         {
             this.s.DrawScoped(scope =>
             {
                 scope.Fill(Color.Black);
                 scope.StrokeWeight(0);
-                scope.Circle(
-                    this.Position.X,
-                    this.Position.Y,
-                    this.Radius);
+                // this.DrawAsCircle(scope);
+                this.DrawAsRect(scope);
             });
         }
 
@@ -144,9 +162,26 @@ internal static class Example11
             {
                 return false;
             }
-            
-            var d = (body.Position - this.Position).Length();
-            return d - this.Radius - body.Radius <= 0;
+
+            return Intersect.Circles(
+                this.Position,
+                this.Radius,
+                body.Position,
+                body.Radius);
+
+            // Seems like Intersect.Recs is broken.
+            //
+            // return Intersect.Recs(
+            //     new Rectangle(
+            //         this.Position.X - this.Radius,
+            //         this.Position.Y - this.Radius,
+            //         this.Radius * 2,
+            //         this.Radius * 2),
+            //     new Rectangle(
+            //         body.Position.X - body.Radius,
+            //         body.Position.Y - body.Radius,
+            //         body.Radius * 2,
+            //         body.Radius * 2));
         }
     }
     
@@ -164,20 +199,22 @@ internal static class Example11
             {
                 s.Background(Color.RayWhite);
 
-                for (var i = 0; i < 10; i++)
+                // Setup some static nuclides.
+                for (var i = 0; i < 20; i++)
                 {
-                    var x = 96 + (i * 48);
+                    var x = 96 + (i * 24);
                     nuclides.Add(new Nuclide(s)
                     {
                         Position = new Vector2(x, 120),
-                        Radius = 8f,
+                        Radius = 10f,
                     });
                 }
 
+                // Setup a neutron with an initial velocity.
                 neutrons.Add(new Neutron(s)
                 {
                     Position = new Vector2(0, 120),
-                    Velocity = new Vector2(200, 0),
+                    Velocity = new Vector2(160, 0),
                     Radius = 4f,
                 });
             },
@@ -209,6 +246,10 @@ internal static class Example11
                     
                     neutron.Draw();
                 }
+
+                var alive = neutrons.Count;
+                var msg = $"{alive} neutrons alive";
+                Graphics.DrawText(msg, 10, 30, 20, Color.Lime);
             },
         };
         
