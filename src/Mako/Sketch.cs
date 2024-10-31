@@ -215,6 +215,8 @@ public class Sketch
         
         while (!Window.ShouldClose())
         {
+            this.FrameCount += 1;
+            
             var dt = Time.GetFrameTime();
             
             Graphics.BeginTextureMode(canvas);
