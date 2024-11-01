@@ -46,13 +46,12 @@ var sketch = new Sketch(640, 240)
 };
 ```
 
-The `Draw` property has a signature of `Action<Sketch, float>`. It is a 
-*procedure* since it does not return a result (an `Action` in .NET). The 
-`Sketch` argument is the `Sketch` instance for which it is invoked. This object
-offers various drawing and utility methods to help with composing sketches. The 
+The `Draw` property has a signature of `Action<Sketch, float>`.  The `Sketch` 
+argument is the `Sketch` instance for which it is invoked. This object offers 
+various drawing and utility methods to help with composing sketches. The 
 `float` argument is the *delta time* (in seconds) between this and the previous 
-frame. This can be used to scale vectors according to dips or rises in frame rate 
-during runtime.
+frame. This can be used to scale vectors according to dips or rises in frame 
+rate during runtime.
 
 > If your simulation is running at 60 frames/sec then the `dt` argument should
 > be close to 1/60 (~0,017)s. It's ok to ignore the delta time for basic
