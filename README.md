@@ -15,6 +15,10 @@ platform.
 * Include utility libraries for stuff lacking (in the wrapper)
 * Easy things should be easy, hard things should be possible
 
+> Mako is **not** an engine. Its main purpose is for creativity, testing, 
+> benchmarking and algorithm design. And to show off the **Raylib** and
+> **Raylib-CSharp** APIs.
+
 ## Examples
 ### Minimal Sketch
 In **Mako**, the root building block is a `Sketch`. A minimal `Sketch` requires
