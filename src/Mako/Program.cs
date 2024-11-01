@@ -1,7 +1,7 @@
-﻿using Raylib_CSharp.Colors;
-using Raylib_CSharp.Rendering;
+﻿namespace Mako;
 
-namespace Mako;
+using Raylib_CSharp.Colors;
+using Raylib_CSharp.Rendering;
 
 internal static class Example12
 {
