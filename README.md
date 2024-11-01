@@ -62,7 +62,12 @@ during runtime.
 In the example above we are using various methods of the `Sketch` instance to
 do the drawing (such as `Background`, `Fill` and `Circle`). This is often the 
 most convenient way to setup a quick sketch but we still have full access to 
-the underlying **Raylib** API (via [Raylib-CSharp](https://github.com/MrScautHD/Raylib-CSharp))
+the underlying **Raylib** API (via [Raylib-CSharp](https://github.com/MrScautHD/Raylib-CSharp).
+
+> If you use the low level API that goes via **Raylib-CSharp** then you will be
+> operating outside of the drawing context. Any `Fill`, `Stroke` and other
+> context values that you have set will be ignored.
+
 ```csharp
 using Raylib_CSharp.Colors;
 using Raylib_CSharp.Rendering;
