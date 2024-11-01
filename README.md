@@ -24,7 +24,10 @@ platform.
 In **Mako**, the root building block is a `Sketch`. A minimal `Sketch` requires
 a width and height. You can run it but it is just an empty (black) canvas.
 ```csharp
-var sketch = new Sketch(640, 240);
+const int width = 640;
+const int height = 240;
+
+var sketch = new Sketch(width, height);
 sketch.Run();
 ```
 
@@ -55,9 +58,9 @@ during runtime.
 > sketches when you are confident it is running at the intended frame rate.
 
 In the example above we are using various methods of the `Sketch` instance to
-do the drawing. This is often the most convenient way to setup a quick sketch
-but we still have full access to the underlying **Raylib** API 
-(via [Raylib-CSharp](https://github.com/MrScautHD/Raylib-CSharp))
+do the drawing (such as `Background`, `Fill` and `Circle`). This is often the 
+most convenient way to setup a quick sketch but we still have full access to 
+the underlying **Raylib** API (via [Raylib-CSharp](https://github.com/MrScautHD/Raylib-CSharp))
 ```csharp
 using Raylib_CSharp.Colors;
 using Raylib_CSharp.Rendering;
