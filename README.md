@@ -91,11 +91,12 @@ sketch.Run();
 ```
 
 ### Scopes
-A useful feature of the `Sketch` API is that we can scope sketches. Whenever
-we enter a scope we *push* the drawing context onto a stack and when we are
-done we *pop* that context. This is convenient if we want to transform the
-camera or any other context parameters for a particular object that we want to
-draw.
+A useful feature of the `Sketch` API is that we have somewhat formalized scoped
+sketches. Whenever we enter a scope we *push* the drawing context onto a stack 
+and when we are done we *pop* that context. This is convenient if we want to 
+transform the camera or any other context parameters for a particular 
+object that we want to draw. The `DrawScoped` method is a helper so that we
+do not have to worry about maintaining the drawing context stack.
 ```csharp
 const int width = 640;
 const int height = 240;
@@ -139,8 +140,9 @@ var sketch = new Sketch(width, height)
 };
 ```
 
-It's possible to `Push` and `Pop` manually instead of using the `DrawScoped`
-method.
+Of course it is possible to `Push` and `Pop` manually instead of using the 
+`DrawScoped` method. But we need to be careful about our pushes and pops to
+make sure the stack does not get unbalanced.
 ```csharp
 ...
     
