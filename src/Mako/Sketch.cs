@@ -32,6 +32,8 @@ public class Sketch
         this.Height = height;
     }
 
+    public bool DrawFPS { get; set; } = false;
+    
     public long FrameCount { get; private set; }
     
     public int Width { get; }
@@ -261,7 +263,11 @@ public class Sketch
                 Vector2.Zero,
                 Color.White);
             Graphics.EndBlendMode();
-            Graphics.DrawFPS(10, 10);
+            if (this.DrawFPS)
+            {
+                Graphics.DrawFPS(10, 10);
+            }
+            
             Graphics.EndDrawing();
 
             this.FrameCount += 1;

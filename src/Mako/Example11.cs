@@ -1,5 +1,4 @@
 ﻿using Raylib_CSharp.Rendering;
-using Raylib_CSharp.Transformations;
 
 namespace Mako;
 
@@ -10,7 +9,7 @@ internal static class Example11
 {
     private abstract class Body
     {
-        protected Sketch s;
+        protected readonly Sketch s;
         
         protected Body(Sketch s)
         {
@@ -21,14 +20,18 @@ internal static class Example11
         
         public Vector2 Velocity { get; set; }
         
+        // ReSharper disable once MemberCanBePrivate.Local
         public Vector2 Acceleration { get; set; }
 
+        // ReSharper disable once MemberCanBePrivate.Local
         public float Mass { get; set; } = 1;
 
-        public float Radius { get; set; } = 8;
+        public float Radius { get; init; } = 8;
 
+        // ReSharper disable once MemberCanBePrivate.Local
         public float MaxSpeed { get; set; } = 600;
 
+        // ReSharper disable once UnusedMember.Local
         public void ApplyForce(Vector2 force)
         {
             this.Acceleration += Vector2.Divide(force, this.Mass);
@@ -74,6 +77,7 @@ internal static class Example11
     {
         public bool IsActive { get; set; } = true;
 
+        // ReSharper disable once UnusedMember.Local
         private void DrawAsCircle(Sketch scope)
         {
             scope.Circle(
@@ -104,13 +108,15 @@ internal static class Example11
             });
         }
 
-        public Neutron[] Eject()
+        public IEnumerable<Neutron> Eject()
         {
+            const float speed = 50;
+            
             var n1 = new Neutron(this.s)
             {
                 Position = this.Position,
                 Velocity = new Vector2(-10, -20)
-                    .NormalizeMultiply(100),
+                    .NormalizeMultiply(speed),
                 Radius = 4f,
             };
 
@@ -118,16 +124,33 @@ internal static class Example11
             {
                 Position = this.Position,
                 Velocity = new Vector2(-10, 20)
-                    .NormalizeMultiply(100),
+                    .NormalizeMultiply(speed),
                 Radius = 4f,
             };
 
-            return [n1, n2];
+            var n3 = new Neutron(this.s)
+            {
+                Position = this.Position,
+                Velocity = new Vector2(-5, -30)
+                    .NormalizeMultiply(speed),
+                Radius = 4f,
+            };
+
+            var n4 = new Neutron(this.s)
+            {
+                Position = this.Position,
+                Velocity = new Vector2(-5, 30)
+                    .NormalizeMultiply(speed),
+                Radius = 4f,
+            };
+
+            return [n1, n2, n3, n4];
         }
     }
     
     private class Neutron(Sketch s) : Body(s)
     {
+        // ReSharper disable once UnusedMember.Local
         private void DrawAsCircle(Sketch scope)
         {
             scope.Circle(
@@ -163,12 +186,6 @@ internal static class Example11
                 return false;
             }
 
-            return Intersect.Circles(
-                this.Position,
-                this.Radius,
-                body.Position,
-                body.Radius);
-
             // Seems like Intersect.Recs is broken.
             //
             // return Intersect.Recs(
@@ -182,6 +199,13 @@ internal static class Example11
             //         body.Position.Y - body.Radius,
             //         body.Radius * 2,
             //         body.Radius * 2));
+            //
+            // Just use circle intersect for now. 
+            return Intersect.Circles(
+                this.Position,
+                this.Radius,
+                body.Position,
+                body.Radius);
         }
     }
     
@@ -247,9 +271,12 @@ internal static class Example11
                     neutron.Draw();
                 }
 
-                var alive = neutrons.Count;
-                var msg = $"{alive} neutrons alive";
-                Graphics.DrawText(msg, 10, 30, 20, Color.Lime);
+                Graphics.DrawText(
+                    $"{neutrons.Count} neutrons alive", 
+                    10, 
+                    30, 
+                    20, 
+                    Color.Lime);
             },
         };
         
