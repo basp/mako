@@ -138,3 +138,36 @@ var sketch = new Sketch(width, height)
     },
 };
 ```
+
+It's possible to `Push` and `Pop` manually instead of using the `DrawScoped`
+method.
+```csharp
+...
+    
+Draw = (s, _) =>
+{
+    s.Background(Color.RayWhite);
+    s.Fill(Color.Orange);
+    
+    s.Push();
+    s.Translate(width / 2f, height / 2f);
+    s.Fill(Color.SkyBlue);
+    s.Circle(0, 0, 64f);
+    s.Pop();
+      
+    s.Circle(width, height, 64f);
+
+    s.Push();
+    s.Translate(width / 4f, height / 4f);
+    s.Fill(Color.Lime);
+    s.Circle(0, 0, 32f);
+    s.Pop();
+      
+    s.Circle(0, 0, 64f);
+},   
+...
+```
+
+> Sometimes (or depending on your taste) this can be clearer than the scoping
+> mechanism. However, it is recommended to use scoping since it will always make
+> sure the drawing context stack is maintained correctly.
