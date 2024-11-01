@@ -120,7 +120,7 @@ var sketch = new Sketch(width, height)
                       scope.Fill(Color.SkyBlue);
                       scope.Circle(0, 0, 64f);
                   });
-                  
+                
                   s.DrawScoped(scope =>
                   {
                       scope.Translate(width / 4f, height / 4f);
