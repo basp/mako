@@ -20,7 +20,7 @@ platform.
 > **Raylib-CSharp** APIs.
 
 ## Examples
-### Minimal Sketch
+### Minimal
 In **Mako**, the root building block is a `Sketch`. A minimal `Sketch` requires
 a width and height. You can run it but it is just an empty (black) canvas.
 ```csharp
@@ -31,6 +31,7 @@ var sketch = new Sketch(width, height);
 sketch.Run();
 ```
 
+### Static Shape
 When we want to draw (or animate) something we can assign the `Draw` property.
 This property is a procedure that takes two arguments.
 ```csharp
@@ -57,6 +58,7 @@ during runtime.
 > be close to 1/60 (~0,017)s. It's ok to ignore the delta time for basic
 > sketches when you are confident it is running at the intended frame rate.
 
+### Low Level API
 In the example above we are using various methods of the `Sketch` instance to
 do the drawing (such as `Background`, `Fill` and `Circle`). This is often the 
 most convenient way to setup a quick sketch but we still have full access to 
@@ -84,3 +86,17 @@ var sketch = new Sketch(width, height)
 sketch.Run();
 ```
 
+### Sketch API vs. Raylib API
+The **Sketch** API has very limited features compared to the **Raylib** API but
+some things are much easier. We can use nested (scoped) sketches and easily
+push and pop drawing context when we want. Using the underlying framework also
+saves us from some busywork (such as setting up the window and beginning and
+making sure we end all kinds of modes).
+
+There's a lot of things we cannot do with the **Sketch** API that we would like 
+to do. For example, there's no API to draw ellipses because dependencies do nut 
+support drawing ellipses with stroke weight and our Sketch API suggests it 
+should. Drawing arcs and curves, segments, polygons, all that stuff is
+impossible with the current **Sketch** API. We want a coherent API and if we 
+cannot emulate it somewhat properly we are not going to support it. In this
+regard we rely on the capabilities of **Raylib** and **Raylib-CSharp** as well.
