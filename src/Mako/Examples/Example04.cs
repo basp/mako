@@ -1,9 +1,10 @@
-﻿namespace Mako;
+﻿namespace Mako.Examples;
 
 using System.Numerics;
+using Raylib_CSharp.Interact;
 using Raylib_CSharp.Colors;
 
-internal static class Example03
+internal static class Example04
 {
     public static void Run()
     {
@@ -43,7 +44,6 @@ internal static class Example03
     
     private class Mover
     {
-        private readonly Random random = new();
         private readonly Sketch s;
         
         public Mover(Sketch s)
@@ -69,9 +69,10 @@ internal static class Example03
 
         public void Update(float dt)
         {
-            this.Acceleration = Vector.Random2D();
-            this.Acceleration *= this.random.NextSingle() * 20;
-            this.Velocity = (this.Velocity + this.Acceleration).Limit(600);
+            var mouse = Input.GetMousePosition();
+            
+            this.Acceleration = (mouse - this.Position).NormalizeMultiply(20f);
+            this.Velocity = (this.Velocity + this.Acceleration).Limit(300);
             this.Position += this.Velocity * dt;
 
             this.Wrap();

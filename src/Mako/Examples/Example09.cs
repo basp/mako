@@ -1,12 +1,13 @@
-﻿using System.Numerics;
+﻿namespace Mako.Examples;
+
+using System.Numerics;
+using Raylib_CSharp;
 using Raylib_CSharp.Colors;
 using Raylib_CSharp.Rendering;
 
-namespace Mako;
-
-internal static class Example08
+internal static class Example09
 {
-    private static float G = 8;
+    private static float G = 1.2f;
     
     private class Body
     {
@@ -32,13 +33,12 @@ internal static class Example08
             this.Acceleration += Vector2.Divide(force, this.Mass);
         }
         
-        public void Attract(Body body)
+        public Vector2 Attract(Body body)
         {
             var force = this.Position - body.Position;
             var d = force.Length().Constrain(5, 25);
             var str = (G * (this.Mass * body.Mass)) / (d * d);
-            force = force.NormalizeMultiply(str);
-            body.ApplyForce(force);
+            return force.NormalizeMultiply(str);
         }
 
         public void Update(float dt)
@@ -53,13 +53,13 @@ internal static class Example08
             this.s.DrawScoped(scope =>
             {
                 this.s.SetBlendMode(BlendMode.Alpha);
-                this.s.StrokeWeight(0);
-                this.s.Stroke(Color.Black);
-                this.s.Fill(new Color(16, 160, 160, 63));
+                this.s.StrokeWeight(4);
+                this.s.Stroke(Color.White);
+                this.s.Fill(new Color(32, 200, 220, 200));
                 this.s.Circle(
                     this.Position.X,
                     this.Position.Y,
-                    this.Radius * 1f);
+                    this.Radius * 8f);
             });
         }
     }
@@ -69,10 +69,7 @@ internal static class Example08
         const int width = 640;
         const int height = 640;
 
-        Body? bodyA = null;
-        Body? bodyB = null;
-
-        const float velocity = 2;
+        var bodies = new List<Body>();
         
         var sketch = new Sketch(width, height)
         {
@@ -81,35 +78,44 @@ internal static class Example08
             {
                 s.Background(Color.Black);
 
-                bodyA = new Body(s)
+                for (var i = 0; i < 10; i++)
                 {
-                    Position = new Vector2(width / 2f, 80),
-                    Velocity = new Vector2(velocity, 0),
-                    Mass = 16,
-                };
+                    var x = Raylib.GetRandomValue(0, width);
+                    var y = Raylib.GetRandomValue(0, height);
+                    var mass = Utils.GetRandomSingle(0.1f, 2);
 
-                bodyB = new Body(s)
-                {
-                    Position = new Vector2(width / 2f, height - 80),
-                    Velocity = new Vector2(-velocity, 0),
-                    Mass = 16,
-                };
+                    bodies.Add(new Body(s)
+                    {
+                        Position = new Vector2(x, y),
+                        Mass = mass,
+                    });
+                }
             },
             Draw = (s, dt) =>
             {
-                if (s.FrameCount % 15 == 0)
+                s.DrawScoped(scope =>
                 {
-                    s.Background(new Color(0, 0,0, 4));;
+                    s.SetBlendMode(BlendMode.Multiplied);
+                    s.Background(new Color(0, 0, 0, 20));
+                });
+
+                for (var i = 0; i < bodies.Count; i++)
+                {
+                    for (var j = 0; j < bodies.Count; j++)
+                    {
+                        if (i == j)
+                        {
+                            // Don't attract ourself.
+                            continue;
+                        }
+
+                        var force = bodies[j].Attract(bodies[i]);
+                        bodies[i].ApplyForce(force);
+                    }
+                    
+                    bodies[i].Update(dt);
+                    bodies[i].Draw();
                 }
-             
-                bodyA!.Attract(bodyB!);
-                bodyB!.Attract(bodyA!);
-
-                bodyA!.Update(dt);
-                bodyA!.Draw();
-
-                bodyB!.Update(dt);
-                bodyB!.Draw();
             },
         };
         

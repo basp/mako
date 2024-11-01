@@ -1,36 +1,51 @@
-﻿using Raylib_CSharp.Interact;
-
-namespace Mako;
+﻿namespace Mako.Examples;
 
 using System.Numerics;
+using Raylib_CSharp;
 using Raylib_CSharp.Colors;
 
-internal static class Example04
+internal static class Example02
 {
     public static void Run()
     {
-        const int width = 640;
-        const int height = 240;
-
         var movers = new List<Mover>();
-        
-        var sketch = new Sketch(width, height)
+        var sketch = new Sketch(640, 240)
         {
             Setup = s =>
             {
-                movers.Add(new Mover(s)
+                for (var i = 0; i < 1; i++)
                 {
-                    Radius = 32,
-                    Position = new Vector2(320, 120),
-                });
+                    var x = Raylib.GetRandomValue(32, 640 - 32);
+                    var y = Raylib.GetRandomValue(32, 240 - 32);
 
-                s.StrokeWeight(8);
+                    var ddx = Raylib.GetRandomValue(-1, 1);
+                    var ddy = Raylib.GetRandomValue(-1, 1);
+
+                    var r = Raylib.GetRandomValue(8, 32);
+                    
+                    var pos = new Vector2(x, y);
+                    var vel = new Vector2(0, 0);
+                    var acc = new Vector2(ddx, ddy);
+
+                    var mover = new Mover(s)
+                    {
+                        Position = pos,
+                        Velocity = vel,
+                        Acceleration = acc,
+                        Radius = r,
+                    };
+
+                    movers.Add(mover);
+                }
+                
+                s.Background(Color.SkyBlue);
+                s.Fill(Color.RayWhite);
                 s.Stroke(Color.Black);
-                s.Fill(Color.White);
+                s.StrokeWeight(4f);
             },
             Draw = (s, dt) =>
             {
-                s.Background(Color.RayWhite);
+                s.Background(Color.SkyBlue);
                 
                 foreach (var mover in movers)
                 {
@@ -42,7 +57,7 @@ internal static class Example04
         
         sketch.Run();
     }
-    
+
     private class Mover
     {
         private readonly Sketch s;
@@ -70,10 +85,7 @@ internal static class Example04
 
         public void Update(float dt)
         {
-            var mouse = Input.GetMousePosition();
-            
-            this.Acceleration = (mouse - this.Position).NormalizeMultiply(20f);
-            this.Velocity = (this.Velocity + this.Acceleration).Limit(300);
+            this.Velocity = (this.Velocity + this.Acceleration).Limit(600);
             this.Position += this.Velocity * dt;
 
             this.Wrap();

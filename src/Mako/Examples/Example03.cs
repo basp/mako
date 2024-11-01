@@ -1,51 +1,34 @@
-﻿namespace Mako;
+﻿namespace Mako.Examples;
 
 using System.Numerics;
-using Raylib_CSharp;
 using Raylib_CSharp.Colors;
 
-internal static class Example02
+internal static class Example03
 {
     public static void Run()
     {
+        const int width = 640;
+        const int height = 240;
+
         var movers = new List<Mover>();
-        var sketch = new Sketch(640, 240)
+        
+        var sketch = new Sketch(width, height)
         {
             Setup = s =>
             {
-                for (var i = 0; i < 1; i++)
+                movers.Add(new Mover(s)
                 {
-                    var x = Raylib.GetRandomValue(32, 640 - 32);
-                    var y = Raylib.GetRandomValue(32, 240 - 32);
+                    Radius = 32,
+                    Position = new Vector2(320, 120),
+                });
 
-                    var ddx = Raylib.GetRandomValue(-1, 1);
-                    var ddy = Raylib.GetRandomValue(-1, 1);
-
-                    var r = Raylib.GetRandomValue(8, 32);
-                    
-                    var pos = new Vector2(x, y);
-                    var vel = new Vector2(0, 0);
-                    var acc = new Vector2(ddx, ddy);
-
-                    var mover = new Mover(s)
-                    {
-                        Position = pos,
-                        Velocity = vel,
-                        Acceleration = acc,
-                        Radius = r,
-                    };
-
-                    movers.Add(mover);
-                }
-                
-                s.Background(Color.SkyBlue);
-                s.Fill(Color.RayWhite);
+                s.StrokeWeight(8);
                 s.Stroke(Color.Black);
-                s.StrokeWeight(4f);
+                s.Fill(Color.White);
             },
             Draw = (s, dt) =>
             {
-                s.Background(Color.SkyBlue);
+                s.Background(Color.RayWhite);
                 
                 foreach (var mover in movers)
                 {
@@ -57,9 +40,10 @@ internal static class Example02
         
         sketch.Run();
     }
-
+    
     private class Mover
     {
+        private readonly Random random = new();
         private readonly Sketch s;
         
         public Mover(Sketch s)
@@ -85,6 +69,8 @@ internal static class Example02
 
         public void Update(float dt)
         {
+            this.Acceleration = Mako.Vector.Random2D();
+            this.Acceleration *= this.random.NextSingle() * 20;
             this.Velocity = (this.Velocity + this.Acceleration).Limit(600);
             this.Position += this.Velocity * dt;
 

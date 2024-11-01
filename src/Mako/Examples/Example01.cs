@@ -1,4 +1,4 @@
-﻿namespace Mako;
+﻿namespace Mako.Examples;
 
 using System.Numerics;
 using Raylib_CSharp;

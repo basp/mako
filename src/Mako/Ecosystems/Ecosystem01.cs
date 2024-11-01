@@ -1,8 +1,8 @@
-﻿using System.Numerics;
+﻿namespace Mako.Ecosystems;
+
+using System.Numerics;
 using Raylib_CSharp;
 using Raylib_CSharp.Colors;
-
-namespace Mako;
 
 internal static class Ecosystem01
 {
@@ -139,7 +139,7 @@ internal static class Ecosystem01
 
         public override void Update(float dt)
         {
-            var dir = Vector.Random2D();
+            var dir = Mako.Vector.Random2D();
             var spd = this.random.NextSingle() * 30f;
             
             this.Acceleration = dir * spd;

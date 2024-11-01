@@ -1,7 +1,7 @@
-﻿using System.Numerics;
-using Raylib_CSharp.Colors;
+﻿namespace Mako.Examples;
 
-namespace Mako;
+using System.Numerics;
+using Raylib_CSharp.Colors;
 
 internal static class Example07
 {
