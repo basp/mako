@@ -90,17 +90,49 @@ var sketch = new Sketch(width, height)
 sketch.Run();
 ```
 
-### Sketch API vs. Raylib API
-The **Sketch** API has very limited features compared to the **Raylib** API but
-some things are much easier. We can use nested (scoped) sketches and easily
-push and pop drawing context when we want. Using the underlying framework also
-saves us from some busywork (such as setting up the window and beginning and
-making sure we end all kinds of modes).
+### Scopes
+A useful feature of the `Sketch` API is that we can scope sketches. Whenever
+we enter a scope we *push* the drawing context onto a stack and when we are
+done we *pop* that context. This is convenient if we want to transform the
+camera or any other context parameters for a particular object that we want to
+draw.
+```csharp
+const int width = 640;
+const int height = 240;
 
-There's a lot of things we cannot do with the **Sketch** API that we would like 
-to do. For example, there's no API to draw ellipses because dependencies do nut 
-support drawing ellipses with stroke weight and our Sketch API suggests it 
-should. Drawing arcs and curves, segments, polygons, all that stuff is
-impossible with the current **Sketch** API. We want a coherent API and if we 
-cannot emulate it somewhat properly we are not going to support it. In this
-regard we rely on the capabilities of **Raylib** and **Raylib-CSharp** as well.
+var sketch = new Sketch(width, height)
+{
+    Draw = (s, _) =>
+    {
+        const int width = 640;
+        const int height = 240;
+
+        var sketch = new Sketch(width, height)
+        {
+            Draw = (s, _) =>
+            {
+                  s.Background(Color.RayWhite);
+                  s.Fill(Color.Orange);
+                  
+                  s.DrawScoped(scope =>
+                  {
+                      scope.Translate(width / 2f, height / 2f);
+                      scope.Fill(Color.SkyBlue);
+                      scope.Circle(0, 0, 64f);
+                  });
+                  
+                  s.DrawScoped(scope =>
+                  {
+                      scope.Translate(width / 4f, height / 4f);
+                      scope.Fill(Color.Lime);
+                      scope.Circle(0, 0, 32f);
+                  });
+                  
+                  s.Circle(0, 0, 64f);
+            },
+        };
+        
+        sketch.Run();        
+    },
+};
+```
