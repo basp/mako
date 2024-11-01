@@ -168,6 +168,6 @@ Draw = (s, _) =>
 ...
 ```
 
-> Sometimes (or depending on your taste) this can be clearer than the scoping
-> mechanism. However, it is recommended to use scoping since it will always make
-> sure the drawing context stack is maintained correctly.
+Sometimes (or depending on your taste) this can be clearer than the scoping
+mechanism. However, it is recommended to use scoping since it will always make
+sure the drawing context stack is maintained correctly.
